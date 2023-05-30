@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Todo
 from .forms import TodoForm
@@ -26,4 +26,12 @@ def remove(request, item_id):
     item.delete()
     messages.info(request, "Ваша запись была удалена !!!")
     return redirect('home')
+
+
+def toggle_completed(request, item_id):
+    item = get_object_or_404(Todo, id=item_id)
+    item.completed = not item.completed
+    item.save()
+    return redirect('home')
+
 
