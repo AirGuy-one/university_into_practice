@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+
+    <meta charset="utf-8">
+    <title>{{ title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        .items-and-form {
+            display: flex;
+        }
+
+        .page-title {
+            text-align: center;
+        }
+
+        .card {
+            width: 500px;
+            height: 250px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5),
+            0 6px 20px 0 rgba(0, 0, 0, 0.39);
+            background: #5eb3da;
+            margin-bottom: 5%;
+            border-radius: 10px;
+            padding: 2%;
+        }
+
+        .submit_form {
+            text-align: center;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 30px;
+            background: #39d54e;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4),
+            0 6px 20px 0 rgba(0, 0, 0, 0.36);
+        }
+
+        .submit_form form {
+            margin-bottom: 0;
+        }
+
+        .submit_form label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .submit_form input[type="text"],
+        .submit_form textarea {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .submit_form textarea {
+            resize: vertical;
+            height: 100px;
+        }
+
+        .submit_form input[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #2998c4;
+            color: #fff;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.4)
+        }
+
+        .submit_form input[type="submit"]:hover {
+            background: #199bcc;
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.4),
+            0 2px 2px 0 rgba(0, 0, 0, 0.36);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #be1414;
+            color: #fff;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #ff0000;
+        }
+
+    </style>
+
+</head>
+
+<body class="container-fluid">
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-info">
+            <strong>{{ message }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<main>
+    <div class="page-title">
+        <h1>TODO LIST приложение</h1>
+        <hr/>
+    </div>
+    <div class="items-and-form">
+        <div class="items">
+            {% for i in list %}
+                <div class="card">
+                    <b>{{ i.title }}</b>
+                    <hr/>
+                    {{ i.updated_at }}
+                    <hr/>
+                    {{ i.description }}
+                    <hr/>
+                    {% if i.completed %}
+                        <p style="color: greenyellow;"><b>✅сделано</b></p>
+                    {% else %}
+                        <p style="color: red;"><b>✖не сделано</b></p>
+                    {% endif %}
+                    <form action="/del/{{ i.id }}" method="POST" style=" padding-right: 4%; padding-bottom: 3%;">
+                        {% csrf_token %}
+                        <button value="remove" type="submit" class="btn" style="float: right;">
+                            удалить
+                        </button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="submit_form">
+            <form method="POST">
+                {% csrf_token %}
+                {{ forms.as_p }}
+                <p><input type="submit" class="btn" value="отправить"/></p>
+            </form>
+        </div>
+    </div>
+</main>
+
+</body>
+
+</html>
